@@ -4,36 +4,36 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>About · Cleaner, Safer Skies</title>
+  <link rel="icon" type="image/png" href="/static/assets/Logo.png">
   <link href="/static/css/style.css" rel="stylesheet">
 
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:#eef2de; color:#0f172a; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:#ffffff; color:#0f172a; }
     .container { max-width: 900px; margin: 0 auto; padding: 24px; }
     header, footer { background:#fff; border-bottom:1px solid #e5e7eb; }
     footer { border-top:1px solid #e5e7eb; border-bottom:none; margin-top:32px; }
     a { color:#0ea5e9; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    h1 { font-size: 2rem; margin: 0 0 8px 0; }
+    h1 { font-size: 2rem; margin: 40px 0 8px 0; }
     h2 { font-size: 1.25rem; margin-top: 24px; }
     ul { padding-left: 1.25rem; }
     .muted { color:#64748b; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container" style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px;">
-      <a href="/" style="font-weight:600; color:#0f172a;">Cleaner, Safer Skies</a>
-      <nav style="font-size:0.95rem;">
-        <a href="/">Home</a>
-        &nbsp;·&nbsp;
-        <a href="/privacy">Privacy</a>
-        &nbsp;·&nbsp;
-        <a href="/about" style="font-weight:600;">About</a>
-      </nav>
+   <!-- Header -->
+  <nav class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 px-8 py-4 z-50 h-[60px]">
+    <div class="flex flex-row items-center gap-8 h-full">
+      <div class="text-xl font-semibold text-gray-900">CleanSkies</div>
+      <ul class="flex flex-row gap-6 list-none">
+        <li><a href="/" class="text-gray-600 hover:text-gray-900 text-sm">Home</a></li>
+        <li><a href="/privacy" class="text-gray-600 hover:text-gray-900 text-sm">Privacy</a></li>
+        <li><a href="/about" class="text-gray-600 hover:text-gray-900 text-sm">About</a></li>
+      </ul>
     </div>
-  </header>
+  </nav>
 
-  <main class="container">
+  <main class="container mt-[60px]">
     <h1>About This Project</h1>
     <p class="muted">Cleaner, Safer Skies - NASA TEMPO Challenge 2025</p>
 

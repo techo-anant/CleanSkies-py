@@ -1,10 +1,6 @@
 // static/js/map.js
 
-// Approx Canada bounds (southwest, northeast)
-const canadaBounds = L.latLngBounds(
-  [41.0, -141.0], // SW (near Windsor/Vancouver Island south edge)
-  [84.0, -52.0]   // NE (far north / Newfoundland east edge)
-);
+const worldBounds = L.latLngBounds([-85, -180], [85, 180]);
 
 // Center on Canada (roughly Nunavut)
 const initialCenter = [56.0, -96.0];
@@ -14,9 +10,10 @@ const map = L.map('map', {
   zoom: 4,
   minZoom: 3,                 // prevent zooming too far out
   maxZoom: 12,                // cap max zoom if tiles get slow
-  maxBounds: canadaBounds,    // hard bounding box
+  maxBounds: worldBounds,    // hard bounding box
   maxBoundsViscosity: 1.0,    // â€œelastic wallâ€ (1.0 = hard)
   worldCopyJump: false        // donâ€™t wrap to another world copy
+  
 });
 
 // make it globally accessible if you use invalidateSize()
@@ -25,8 +22,6 @@ window.map = map;
 // Use tiles with noWrap so the map won't wrap around the world copies
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
-  noWrap: true,               // important for bounds
-  bounds: canadaBounds        // hint to the tile layer
 }).addTo(map);
 
 let marker;
@@ -262,12 +257,10 @@ function clampToBounds(latlng) {
 }
 
 map.on('click', (ev) => {
-  const clamped = clampToBounds(ev.latlng);
-  if (!canadaBounds.contains(ev.latlng)) {
-    map.panTo(clamped, { animate: true });
-  }
-  debounceLoad(clamped.lat, clamped.lng);
+  const { lat, lng } = ev.latlng;
+  debounceLoad(lat, lng);     // no panTo/clamp needed
 });
+
 
 // Panel Details Implementation to fetch data 
 function fillModal(data, lat, lon) {

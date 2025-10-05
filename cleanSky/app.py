@@ -142,7 +142,7 @@ def api_air():
     if primary.get("ok"):
         return jsonify(primary), 200
 
-    # ✅ try fallback
+    # try fallback
     fallback = fetch_openmeteo_air(lat, lon)
     return jsonify(fallback), (200 if fallback.get("ok") else 502)
 
