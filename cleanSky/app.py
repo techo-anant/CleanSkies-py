@@ -37,7 +37,7 @@ def fetch_openweather_air(lat: float, lon: float):
             "source": "openweather",
             "aqi": aqi_idx,
             "aqi_label": _aqi_label(aqi_idx),
-            "components": {
+            "components": { 
                 "pm2_5": comps.get("pm2_5"),
                 "pm10":  comps.get("pm10"),
                 "o3":    comps.get("o3"),
@@ -114,8 +114,8 @@ def api_air():
     if primary.get("ok"):
         return jsonify(primary), 200
 
-    fallback = fetch_openmeteo_air(lat, lon)
-    return jsonify(fallback), (200 if fallback.get("ok") else 502)
+    # fallback = fetch_openmeteo_air(lat, lon)
+    # return jsonify(fallback), (200 if fallback.get("ok") else 502)
 
 
 # Home route

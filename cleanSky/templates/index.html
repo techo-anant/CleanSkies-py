@@ -36,6 +36,17 @@
     /* AQI card */
     #aqiBox{ background:#e5e7eb; border-radius:8px; padding:12px; text-align:center; }
 
+    /* modal hidden by default */
+    #modalBackdrop { display: none; }
+
+    /* modal hidden by default (inline style has display:none) */
+    #modalBackdrop.show {
+      display: flex;                 /* make it visible & centered */
+      animation: fadeIn .15s ease-out;
+    }
+    @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+
+
     /* header always on top */
     nav { z-index: 200; position: fixed; top:0; left:0; right:0; }
   </style>
@@ -91,6 +102,15 @@
         <p id="advice" style="margin-top:4px;">—</p>
       </div>
 
+      <!---Adding a button inside the panel-->
+      <div style="margin-top:12px;">
+        <button id="openModalBtn"
+          style="background:#111827;color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;">
+         Open details panel
+        </button>
+      </div>
+
+
       <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
         <div id="pm25" style="background:#f3f4f6; padding:6px 10px; border-radius:999px; font-size:12px;">PM2.5 —</div>
         <div id="pm10" style="background:#f3f4f6; padding:6px 10px; border-radius:999px; font-size:12px;">PM10 —</div>
@@ -115,9 +135,61 @@
     </div>
   </aside>
 
-    <div class="none">
-      
+    <!-- Center Panel -->
+
+  <div id="modalBackdrop"
+     style="position:fixed;inset:0;background:rgba(0,0,0,.35);align-items:center;justify-content:center;z-index:2000;">
+    <div id="modalPanel"
+        role="dialog" aria-modal="true" aria-labelledby="modalTitle"
+        style="background:#fff;width:min(820px,92vw);max-height:82vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden;display:flex;flex-direction:column;">
+      <!-- header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #eee;">
+        <h3 id="modalTitle" style="margin:0;font-size:18px;font-weight:700;">Extra details</h3>
+        <button id="closeModalBtn"
+                style="background:#f3f4f6;border:none;border-radius:8px;padding:6px 10px;cursor:pointer;">✕</button>
+      </div>
+      <!-- content  -->
+      <div id="modalBody" style="padding:16px; overflow:auto;">
+        <div style="display:grid;grid-template-columns: 1fr 1fr; gap:12px 18px;">
+          <div><div class="k" style="color:#6b7280;font-size:12px;">City ID</div><div id="m_id" class="v">—</div></div>
+          <div><div class="k" style="color:#6b7280;font-size:12px;">Name</div><div id="m_name" class="v">—</div></div>
+
+          <div><div class="k">Coordinates</div><div id="m_coord" class="v">—</div></div>
+          <div><div class="k">Country</div><div id="m_country" class="v">—</div></div>
+
+          <div><div class="k">Temp</div><div id="m_temp" class="v">—</div></div>
+          <div><div class="k">Feels like</div><div id="m_feels" class="v">—</div></div>
+
+          <div><div class="k">Min / Max</div><div id="m_minmax" class="v">—</div></div>
+          <div><div class="k">Humidity</div><div id="m_humidity" class="v">—</div></div>
+
+          <div><div class="k">Pressure</div><div id="m_pressure" class="v">—</div></div>
+          <div><div class="k">Visibility</div><div id="m_visibility" class="v">—</div></div>
+
+          <div><div class="k">Wind</div><div id="m_wind" class="v">—</div></div>
+          <div><div class="k">Cloudiness</div><div id="m_clouds" class="v">—</div></div>
+
+          <div style="grid-column:1/-1;"><div class="k">Weather</div><div id="m_weather" class="v">—</div></div>
+
+          <div><div class="k">Sunrise</div><div id="m_sunrise" class="v">—</div></div>
+          <div><div class="k">Sunset</div><div id="m_sunset" class="v">—</div></div>
+
+          <div><div class="k">Timestamp</div><div id="m_dt" class="v">—</div></div>
+          <div><div class="k">Timezone offset</div><div id="m_tz" class="v">—</div></div>
+
+          <div style="grid-column:1/-1;"><div class="k">Raw JSON</div>
+            <pre id="m_raw" style="white-space:pre-wrap;background:#f9fafb;border:1px solid #eee;border-radius:8px;padding:10px;max-height:220px;overflow:auto;margin:6px 0 0 0;">—</pre>
+          </div>
+        </div>
+      </div>
+      <!-- footer -->
+      <div style="padding:10px 16px;border-top:1px solid #eee;display:flex;justify-content:flex-end;">
+        <button id="closeModalBtn2"
+                style="background:#111827;color:#fff;border:none;border-radius:8px;padding:8px 10px;cursor:pointer;font-weight:600;">Close</button>
+      </div>
     </div>
+  </div>
+
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="{{ url_for('static', filename='js/map.js') }}"></script>

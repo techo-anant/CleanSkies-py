@@ -15,8 +15,8 @@ const map = L.map('map', {
   minZoom: 3,                 // prevent zooming too far out
   maxZoom: 12,                // cap max zoom if tiles get slow
   maxBounds: canadaBounds,    // hard bounding box
-  maxBoundsViscosity: 1.0,    // “elastic wall” (1.0 = hard)
-  worldCopyJump: false        // don’t wrap to another world copy
+  maxBoundsViscosity: 1.0,    // â€œelastic wallâ€ (1.0 = hard)
+  worldCopyJump: false        // donâ€™t wrap to another world copy
 });
 
 // make it globally accessible if you use invalidateSize()
@@ -69,18 +69,18 @@ if (openBtn)  openBtn.addEventListener('click', openSidebar);
 // 2. helper: advice
 function adviceFromAqi(label) {
   switch (label) {
-    case 'Good': return 'Air quality is good — enjoy outdoor activities.';
-    case 'Fair': return 'Fair — sensitive groups should monitor symptoms.';
-    case 'Moderate': return 'Moderate — consider shorter outdoor activity if sensitive.';
-    case 'Poor': return 'Poor — limit strenuous outdoor activity.';
-    case 'Very Poor': return 'Very Poor — avoid outdoor activity if possible.';
-    default: return '—';
+    case 'Good': return 'Air quality is good â€” enjoy outdoor activities.';
+    case 'Fair': return 'Fair â€” sensitive groups should monitor symptoms.';
+    case 'Moderate': return 'Moderate â€” consider shorter outdoor activity if sensitive.';
+    case 'Poor': return 'Poor â€” limit strenuous outdoor activity.';
+    case 'Very Poor': return 'Very Poor â€” avoid outdoor activity if possible.';
+    default: return 'â€”';
   }
 }
 
 // 3. helper: number formatting
 function fmt(n, d = 1) {
-  return (n == null) ? '—' : Number(n).toFixed(d);
+  return (n == null) ? 'â€”' : Number(n).toFixed(d);
 }
 
 // helper: aqi Colors
@@ -116,9 +116,9 @@ async function reverseGeocode(lat, lon) {
 // 4) Update sidebar content + marker, then open the panel
 async function updateSidebar(data, lat, lon) {
   const ok    = !!(data && data.ok);
-  const aqi   = ok ? data.aqi : '—';
-  const label = ok ? data.aqi_label : '—';
-  const src   = ok ? data.source : '—';
+  const aqi   = ok ? data.aqi : 'â€”';
+  const label = ok ? data.aqi_label : 'â€”';
+  const src   = ok ? data.source : 'â€”';
   const wx    = (ok && data.weather) ? data.weather : {};
   const comps = (data && data.components) ? data.components : {};
 
@@ -156,8 +156,8 @@ async function updateSidebar(data, lat, lon) {
   // --- Weather row ---
   const tempEl = document.getElementById('temp');
   const windEl = document.getElementById('wind');
-  if (tempEl) tempEl.textContent = (wx.temp_c != null) ? `${fmt(wx.temp_c, 0)} °C` : '—';
-  if (windEl) windEl.textContent = (wx.wind_kmh != null) ? `${fmt(wx.wind_kmh, 0)} km/h` : '—';
+  if (tempEl) tempEl.textContent = (wx.temp_c != null) ? `${fmt(wx.temp_c, 0)} Â°C` : 'â€”';
+  if (windEl) windEl.textContent = (wx.wind_kmh != null) ? `${fmt(wx.wind_kmh, 0)} km/h` : 'â€”';
 
   // --- Source + updated time ---
   const srcEl     = document.getElementById('source');
@@ -181,12 +181,43 @@ async function updateSidebar(data, lat, lon) {
   // --- pollutant chips ---
   const pm25El = document.getElementById('pm25');
   const pm10El = document.getElementById('pm10');
-  if (pm25El) pm25El.textContent = `PM2.5 ${fmt(comps.pm2_5)} µg/m³`;
-  if (pm10El) pm10El.textContent = `PM10 ${fmt(comps.pm10)} µg/m³`;
+  if (pm25El) pm25El.textContent = `PM2.5 ${fmt(comps.pm2_5)} Âµg/mÂ³`;
+  if (pm10El) pm10El.textContent = `PM10 ${fmt(comps.pm10)} Âµg/mÂ³`;
 
   // --- finally: reveal the sidebar ---
   openSidebar(); // adds .open class + shifts map (your helpers handle invalidateSize)
 }
+
+
+// ====== center panel (modal) logic ======
+const openModalBtn  = document.getElementById('openModalBtn');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const closeModalBtn = document.getElementById('closeModalBtn');
+
+function openModal() {
+  modalBackdrop.classList.add('show');
+  modalBackdrop.style.display = 'flex';   // optional
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modalBackdrop.classList.remove('show');
+  modalBackdrop.style.display = '';       // optional: lets CSS take over
+  document.body.style.overflow = '';
+}
+
+
+if (openModalBtn)  openModalBtn.addEventListener('click', openModal);
+if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+// click on backdrop closes the modal
+if (modalBackdrop) modalBackdrop.addEventListener('click', (e) => {
+  if (e.target === modalBackdrop) closeModal();
+});
+// ESC key closes the modal
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
 
 
 // 7. fetch data from backend
@@ -215,5 +246,3 @@ map.on('click', (ev) => {
   }
   debounceLoad(clamped.lat, clamped.lng);
 });
-
-
