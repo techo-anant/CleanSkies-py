@@ -1,77 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CleanSkies</title>
-    <link href="/static/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-    <style>
-        #map {
-            height: calc(100vh - 70px);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CleanSkies</title>
+
+  <link href="/static/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <style>
+    /* keep the map visible under your fixed header */
+    #map { height: calc(100vh - 70px); }
+    /* simple sidebar */
+    #sidebar{
+      position:fixed; top:60px; left:0; width:320px; height:calc(100vh - 60px);
+      background:#fff; border-right:1px solid #eee; box-shadow:0 10px 30px rgba(0,0,0,.08);
+      padding:16px; transform:translateX(-100%); transition:transform .3s ease; z-index:10000;
+    }
+    #closeSidebar{ cursor:pointer; border:none; background:#f3f4f6; padding:4px 8px; border-radius:6px; }
+    #aqiBox{ background:#e5e7eb; border-radius:8px; padding:12px; text-align:center; }
+  </style>
 </head>
 <body class="overflow-hidden">
-<!-- Navigation Bar -->
-<nav class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 px-8 py-4 z-50 h-[60px]">
+
+  <!-- Navigation-->
+  <nav class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 px-8 py-4 z-50 h-[60px]">
     <div class="flex flex-row items-center gap-8 h-full">
-        <div class="text-xl font-semibold text-gray-900">CleanSkies</div>
-        <ul class="flex flex-row gap-6 list-none">
-            <li><a href="/" class="text-gray-600 hover:text-gray-900 text-sm">Home</a></li>
-            <li><a href="/privacy" class="text-gray-600 hover:text-gray-900 text-sm">Privacy</a></li>
-        </ul>
+      <div class="text-xl font-semibold text-gray-900">CleanSkies</div>
+      <ul class="flex flex-row gap-6 list-none">
+        <li><a href="/" class="text-gray-600 hover:text-gray-900 text-sm">Home</a></li>
+        <li><a href="/privacy" class="text-gray-600 hover:text-gray-900 text-sm">Privacy</a></li>
+      </ul>
     </div>
-</nav>
+  </nav>
 
-<!-- Map Container -->
-<div class="fixed top-[60px] left-0 right-0 bottom-0 m-2.5">
+  <!-- MAP -->
+  <div class="fixed top-[60px] left-0 right-0 bottom-0 m-2.5">
     <div class="w-full h-full border-4 border-blue-400 rounded-lg overflow-hidden relative">
-        <div id="map" class="w-full h-full"></div>
+      <div id="map" class="w-full h-full"></div>
 
-        <!-- Legend Icon -->
-        <div class="absolute bottom-8 right-5 z-[1000] bg-white p-3 rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-shadow">
-            <svg class="w-8 h-8 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
-            </svg>
-        </div>
+      <!-- ( icon ) -->
+      <div class="absolute bottom-8 right-5 z-[1000] bg-white p-3 rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-shadow">
+        <!-- icon -->
+      </div>
     </div>
-</div>
+  </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script>
-    // Initialize map centered on Canada
-    const map = L.map('map', {
-        center: [62.0, -95.0],
-        zoom: 4,
-        minZoom: 3,
-        maxZoom: 18
-    });
+  <!-- SIDEBAR (off-canvas) -->
+  <aside id="sidebar">
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <h2 id="cityName" style="font-size:20px; font-weight:600;">City</h2>
+      <button id="closeSidebar">✕</button>
+    </div>
 
-    // Add OpenStreetMap tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19
-    }).addTo(map);
+    <div style="margin-top:12px;">
+      <div id="aqiBox">
+        <div style="font-size:14px;">AQI</div>
+        <div id="aqiValue" style="font-size:28px; font-weight:700;">--</div>
+        <div id="aqiCat" style="font-size:14px; font-weight:600;">Category</div>
+      </div>
 
-    // Add a marker (example: Toronto area)
-    const marker = L.circleMarker([43.65, -79.38], {
-        radius: 15,
-        fillColor: '#10b981',
-        color: '#fff',
-        weight: 2,
-        opacity: 1,
-        fillOpacity: 0.8
-    }).addTo(map);
+      <div style="margin-top:12px;">
+        <div style="font-size:12px; color:#6b7280;">Health advice</div>
+        <p id="advice" style="margin-top:4px;">—</p>
+      </div>
 
-    marker.bindPopup('<b>Toronto Area</b><br>Sample location marker');
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;">
+        <div>
+          <div style="font-size:12px; color:#6b7280;">Temp</div>
+          <div id="temp">—</div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:#6b7280;">Wind</div>
+          <div id="wind">—</div>
+        </div>
+      </div>
 
-    // Optional: Add more interactive features
-    map.on('click', function(e) {
-        console.log('Clicked at:', e.latlng);
-    });
-</script>
+      <div style="border-top:1px solid #eee; margin-top:12px; padding-top:8px;">
+        <div style="font-size:12px; color:#6b7280;">Source</div>
+        <div id="source" style="font-size:14px;">OpenAQ (sample)</div>
+        <div id="updated" style="font-size:12px; color:#6b7280;">Updated: —</div>
+      </div>
+    </div>
+  </aside>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="{{ url_for('static', filename='js/map.js') }}"></script>
 </body>
 </html>
