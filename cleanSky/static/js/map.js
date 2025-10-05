@@ -69,12 +69,12 @@ if (openBtn)  openBtn.addEventListener('click', openSidebar);
 // 2. helper: advice
 function adviceFromAqi(label) {
   switch (label) {
-    case 'Good': return 'Air quality is good â€” enjoy outdoor activities.';
-    case 'Fair': return 'Fair â€” sensitive groups should monitor symptoms.';
-    case 'Moderate': return 'Moderate â€” consider shorter outdoor activity if sensitive.';
-    case 'Poor': return 'Poor â€” limit strenuous outdoor activity.';
-    case 'Very Poor': return 'Very Poor â€” avoid outdoor activity if possible.';
-    default: return 'â€”';
+    case 'Good': return 'Air quality is good enjoy outdoor activities.';
+    case 'Fair': return 'Fair sensitive groups should monitor symptoms.';
+    case 'Moderate': return 'Moderate consider shorter outdoor activity if sensitive.';
+    case 'Poor': return 'Poor limit strenuous outdoor activity.';
+    case 'Very Poor': return 'Very Poor avoid outdoor activity if possible.';
+    default: return '';
   }
 }
 
@@ -138,9 +138,9 @@ function setText(id, value) {
 // 4) Update sidebar content + marker, then open the panel
 async function updateSidebar(data, lat, lon) {
   const ok    = !!(data && data.ok);
-  const aqi   = ok ? data.aqi : 'â€”';
-  const label = ok ? data.aqi_label : 'â€”';
-  const src   = ok ? data.source : 'â€”';
+  const aqi   = ok ? data.aqi : '';
+  const label = ok ? data.aqi_label : '';
+  const src   = ok ? data.source : '';
   const wx    = (ok && data.weather) ? data.weather : {};
   const comps = (data && data.components) ? data.components : {};
 
@@ -178,8 +178,8 @@ async function updateSidebar(data, lat, lon) {
   // --- Weather row ---
   const tempEl = document.getElementById('temp');
   const windEl = document.getElementById('wind');
-  if (tempEl) tempEl.textContent = (wx.temp_c != null) ? `${fmt(wx.temp_c, 0)} Â°C` : 'â€”';
-  if (windEl) windEl.textContent = (wx.wind_kmh != null) ? `${fmt(wx.wind_kmh, 0)} km/h` : 'â€”';
+  if (tempEl) tempEl.textContent = (wx.temp_c != null) ? `${fmt(wx.temp_c, 0)} Â°C` : '';
+  if (windEl) windEl.textContent = (wx.wind_kmh != null) ? `${fmt(wx.wind_kmh, 0)} km/h` : '';
 
   // --- Source + updated time ---
   const srcEl     = document.getElementById('source');

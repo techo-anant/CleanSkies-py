@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy · Cleaner, Safer Skies</title>
+
+  <link href="/static/css/style.css" rel="stylesheet">
+
+  <meta name="description" content="Privacy Policy for the Cleaner, Safer Skies web app." />
+  <style>
+    /* Minimal defaults in case style.css is light */
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color:#0f172a; background:#eef2de; }
+    .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+    header, footer { background:#fff; border-bottom:1px solid #e5e7eb; }
+    footer { border-top:1px solid #e5e7eb; border-bottom:none; margin-top:32px; }
+    a { color:#0ea5e9; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    h1 { font-size: 2rem; margin: 0 0 8px 0; }
+    h2 { font-size: 1.25rem; margin-top: 24px; }
+    ul { padding-left: 1.25rem; }
+    .muted { color:#64748b; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container" style="display:flex; align-items:center; justify-content:space-between; padding:16px 24px;">
+      <a href="/" style="font-weight:600; color:#0f172a;">Cleaner, Safer Skies</a>
+      <nav style="font-size:0.95rem;">
+        <a href="/">Home</a>
+        &nbsp;·&nbsp;
+        <a href="/privacy" style="font-weight:600;">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Privacy Policy</h1>
+    <p class="muted">Last updated: <span id="lastUpdated">October 5, 2025</span></p>
+
+    <p>
+      This Privacy Policy explains how <strong>Cleaner, Safer Skies</strong> (“the App”, “we”) collects, uses, and protects
+      information when you use our air-quality site and alert features. By using the App, you agree to this Policy.
+    </p>
+
+    <h2>1) What we collect</h2>
+    <ul>
+      <li><strong>Approximate location</strong> you enter or share to show local AQI.</li>
+      <li><strong>Technical data</strong> (IP (possibly truncated), browser, pages viewed) for security and basic analytics.</li>
+      <li><strong>Alert preferences (optional)</strong>: email/push token, locations/radius, AQI thresholds, quiet hours.</li>
+    </ul>
+
+    <h2>2) External data we use</h2>
+    <ul>
+      <li>NASA TEMPO satellite products (e.g., NO₂, HCHO, O₃ columns)</li>
+      <li>OpenAQ ground stations (PM₂․₅, PM₁₀, O₃, NO₂, …)</li>
+      <li>OpenWeather weather & air-pollution forecasts</li>
+    </ul>
+    <p class="muted">We fetch only what is needed to compute forecasts. We do not share your personal info with these providers.</p>
+
+    <h2>3) How we use info</h2>
+    <ul>
+      <li>Render current conditions and 24–48h forecasts for your area</li>
+      <li>Maintain reliability, performance, and security</li>
+    </ul>
+
+    <h2>4) Cookies & local storage</h2>
+    <p>We may store preferences (units, last location, theme) and session info. You can clear them in your browser settings.</p>
+
+    <h2>5) Security</h2>
+    <p>We use HTTPS and least-privilege access. No method is perfect—contact us if you see an issue.</p>
+
+    <h2>6) Changes</h2>
+    <p>We will post updates here with a new “Last updated” date.</p>
+
+    <h2>7) Contact</h2>
+    <p>Email: <a href="mailto:contact@cleanersaferskies.app">contact@cleanersaferskies.app</a></p>
+
+    <hr>
+    <p class="muted">Forecasts are estimates and may differ from regulatory measurements. Follow local health guidance.</p>
+  </main>
+
+  <footer>
+    <div class="container" style="padding:20px 24px; font-size:0.95rem; color:#64748b;">
+      © <span id="y"></span> Cleaner, Safer Skies · <a href="/privacy">Privacy</a>
+    </div>
+  </footer>
+
+  <script> 
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

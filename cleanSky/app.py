@@ -167,7 +167,13 @@ def get_data():
     result = {"message": f"Received {data}"}
     return jsonify(result)
 
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
