@@ -112,6 +112,28 @@ async function reverseGeocode(lat, lon) {
   }
 }
 
+// panel helpers 
+function dirFromDeg(deg) {
+  if (deg == null) return "—";
+  const dirs = ["N","NNE","NE","ENE","E","ESE","SE","SSE",
+                "S","SSW","SW","WSW","W","WNW","NW","NNW"];
+  const i = Math.round(deg / 22.5) % 16;
+  return dirs[i];
+}
+
+function fmtTime(unix, tzSeconds) {
+  if (unix == null) return "—";
+  // Convert UNIX + timezone (seconds) to local string
+  const d = new Date((unix + (tzSeconds || 0)) * 1000);
+  return d.toUTCString().replace("GMT", "UTC");
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = (value ?? "—");
+}
+
+
 
 // 4) Update sidebar content + marker, then open the panel
 async function updateSidebar(data, lat, lon) {
@@ -246,3 +268,62 @@ map.on('click', (ev) => {
   }
   debounceLoad(clamped.lat, clamped.lng);
 });
+
+// Panel Details Implementation to fetch data 
+function fillModal(data, lat, lon) {
+  const wx = (data && data.weather) ? data.weather : {};
+  const comps = (data && data.components) ? data.components : {};
+  const tz = wx.timezone ?? 0;
+
+  setText("m_id",       wx.id ?? "—");
+  setText("m_name",     wx.name || "—");
+
+  // coordinates "lat, lon"
+  const c = wx.coord || {};
+  setText("m_coord", (c.lat!=null && c.lon!=null) ? `${c.lat.toFixed(2)}, ${c.lon.toFixed(2)}` : `${lat.toFixed(2)}, ${lon.toFixed(2)}`);
+
+  setText("m_country",  wx.country || "—");
+  setText("m_temp",     (wx.temp!=null) ? `${Math.round(wx.temp)} °C` : "—");
+  setText("m_feels",    (wx.feels_like!=null) ? `${Math.round(wx.feels_like)} °C` : "—");
+  setText("m_minmax",   (wx.temp_min!=null && wx.temp_max!=null) ? `${Math.round(wx.temp_min)}° / ${Math.round(wx.temp_max)}°C` : "—");
+  setText("m_humidity", (wx.humidity!=null) ? `${wx.humidity}%` : "—");
+  setText("m_pressure", (wx.pressure!=null) ? `${wx.pressure} hPa` : "—");
+  setText("m_visibility",(wx.visibility!=null) ? `${(wx.visibility/1000).toFixed(1)} km` : "—");
+
+  const wind = wx.wind || {};
+  const wtxt = (wind.speed_kmh!=null)
+      ? `${wind.speed_kmh} km/h ${wind.deg!=null ? `(${dirFromDeg(wind.deg)})` : ""}`.trim()
+      : "—";
+  setText("m_wind", wtxt);
+
+  setText("m_clouds",   (wx.clouds!=null) ? `${wx.clouds}%` : "—");
+
+  // weather description(s)
+  const desc = (wx.weather && wx.weather.length)
+      ? wx.weather.map(o => o.description).filter(Boolean).join(", ")
+      : "—";
+  setText("m_weather", desc);
+
+  // times
+  setText("m_sunrise",  fmtTime(wx.sunrise, tz));
+  setText("m_sunset",   fmtTime(wx.sunset,  tz));
+  setText("m_dt",       fmtTime(wx.dt,      tz));
+  setText("m_tz",       (tz>=0?"+":"") + (tz/3600).toFixed(1) + "h");
+
+  // raw JSON (pretty)
+  const rawEl = document.getElementById("m_raw");
+  if (rawEl) rawEl.textContent = JSON.stringify({weather: wx, components: comps}, null, 2);
+}
+
+async function loadAir(lat, lon) {
+  try {
+    const res = await fetch(`/api/air?lat=${lat}&lon=${lon}`);
+    const data = await res.json();
+    updateSidebar(data, lat, lon);
+    fillModal(data, lat, lon);          // 👈 populate the modal fields here
+  } catch (e) {
+    console.error('air fetch failed', e);
+    updateSidebar({ ok: false }, lat, lon);
+    fillModal({ ok:false }, lat, lon);  // clears to "—"
+  }
+}
