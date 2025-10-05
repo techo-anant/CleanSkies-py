@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanSkies</title>
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <style>
+        #map {
+            height: calc(100vh - 70px);
+        }
+    </style>
+</head>
+<body class="overflow-hidden">
+<!-- Navigation Bar -->
+<nav class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 px-8 py-4 z-50 h-[60px]">
+    <div class="flex flex-row items-center gap-8 h-full">
+        <div class="text-xl font-semibold text-gray-900">CleanSkies</div>
+        <ul class="flex flex-row gap-6 list-none">
+            <li><a href="/" class="text-gray-600 hover:text-gray-900 text-sm">Home</a></li>
+            <li><a href="/privacy" class="text-gray-600 hover:text-gray-900 text-sm">Privacy</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Map Container -->
+<div class="fixed top-[60px] left-0 right-0 bottom-0 m-2.5">
+    <div class="w-full h-full border-4 border-blue-400 rounded-lg overflow-hidden relative">
+        <div id="map" class="w-full h-full"></div>
+
+        <!-- Legend Icon -->
+        <div class="absolute bottom-8 right-5 z-[1000] bg-white p-3 rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-shadow">
+            <svg class="w-8 h-8 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+            </svg>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+    // Initialize map centered on Canada
+    const map = L.map('map', {
+        center: [62.0, -95.0],
+        zoom: 4,
+        minZoom: 3,
+        maxZoom: 18
+    });
+
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19
+    }).addTo(map);
+
+    // Add a marker (example: Toronto area)
+    const marker = L.circleMarker([43.65, -79.38], {
+        radius: 15,
+        fillColor: '#10b981',
+        color: '#fff',
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.8
+    }).addTo(map);
+
+    marker.bindPopup('<b>Toronto Area</b><br>Sample location marker');
+
+    // Optional: Add more interactive features
+    map.on('click', function(e) {
+        console.log('Clicked at:', e.latlng);
+    });
+</script>
+</body>
+</html>
