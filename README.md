@@ -21,8 +21,6 @@ You can explore the live version of CleanSkies here:
 https://cleanskies.wiki
 
 
----
-
 ## Example Screenshot
 ![CleanSkies Demo](cleanSky/static/assets/Demo1.png)
 ![CleanSkies Demo](cleanSky/static/assets/Demo2.png)
