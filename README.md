@@ -25,7 +25,7 @@ https://cleanskies.wiki
 
 ## Example Screenshot
 ![CleanSkies Demo](cleanSky/static/assets/demo1.png)
-![CleanSkies Demo](cleanSkystatic/assets/demo2.png)
+![CleanSkies Demo](cleanSky/static/assets/demo2.png)
 
 ---
 
